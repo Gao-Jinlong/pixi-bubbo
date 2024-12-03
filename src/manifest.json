@@ -1,0 +1,287 @@
+{
+  "bundles": [
+    {
+      "name": "default",
+      "assets": [
+        {
+          "alias": [
+            "audio/bubble-land-sfx.wav",
+            "bubble-land-sfx.wav"
+          ],
+          "src": [
+            "audio/bubble-land-sfx.ogg",
+            "audio/bubble-land-sfx.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/bubbles-falling.wav",
+            "bubbles-falling.wav"
+          ],
+          "src": [
+            "audio/bubbles-falling.ogg",
+            "audio/bubbles-falling.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/bubbo-bubbo-bg-music.wav",
+            "bubbo-bubbo-bg-music.wav"
+          ],
+          "src": [
+            "audio/bubbo-bubbo-bg-music.ogg",
+            "audio/bubbo-bubbo-bg-music.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/cannon-move.wav",
+            "cannon-move.wav"
+          ],
+          "src": [
+            "audio/cannon-move.ogg",
+            "audio/cannon-move.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/powerup-bomb.wav",
+            "powerup-bomb.wav"
+          ],
+          "src": [
+            "audio/powerup-bomb.ogg",
+            "audio/powerup-bomb.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/powerup-super.wav",
+            "powerup-super.wav"
+          ],
+          "src": [
+            "audio/powerup-super.ogg",
+            "audio/powerup-super.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/powerup-time.wav",
+            "powerup-time.wav"
+          ],
+          "src": [
+            "audio/powerup-time.ogg",
+            "audio/powerup-time.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/primary-button-press.wav",
+            "primary-button-press.wav"
+          ],
+          "src": [
+            "audio/primary-button-press.ogg",
+            "audio/primary-button-press.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "audio/secondary-button-press.wav",
+            "secondary-button-press.wav"
+          ],
+          "src": [
+            "audio/secondary-button-press.ogg",
+            "audio/secondary-button-press.mp3"
+          ],
+          "data": {
+            "tags": {}
+          }
+        },
+        {
+          "alias": [
+            "fonts/Bungee-Regular.ttf",
+            "Bungee-Regular.ttf"
+          ],
+          "src": [
+            "fonts/Bungee-Regular.woff2"
+          ],
+          "data": {
+            "tags": {
+              "wf": true,
+              "family": "Bungee-Regular"
+            },
+            "family": "Bungee-Regular"
+          }
+        },
+        {
+          "alias": [
+            "fonts/OpenSans-SemiBold.ttf",
+            "OpenSans-SemiBold.ttf"
+          ],
+          "src": [
+            "fonts/OpenSans-SemiBold.woff2"
+          ],
+          "data": {
+            "tags": {
+              "wf": true,
+              "family": "OpenSans-SemiBold"
+            },
+            "family": "OpenSans-SemiBold"
+          }
+        },
+        {
+          "alias": [
+            "images/favicon.png",
+            "favicon.png"
+          ],
+          "src": [
+            "images/favicon@0.5x.webp",
+            "images/favicon@0.5x.png",
+            "images/favicon.webp",
+            "images/favicon.png"
+          ],
+          "data": {
+            "tags": {}
+          }
+        }
+      ]
+    },
+    {
+      "name": "game-screen",
+      "assets": [
+        {
+          "alias": [
+            "images/game-screen",
+            "game-screen"
+          ],
+          "src": [
+            "images/game-screen@0.5x.webp.json",
+            "images/game-screen@0.5x.png.json",
+            "images/game-screen.webp.json",
+            "images/game-screen.png.json"
+          ],
+          "data": {
+            "tags": {
+              "m": true,
+              "tps": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "pause-overlay",
+      "assets": [
+        {
+          "alias": [
+            "images/pause-overlay/pause-panel.png",
+            "pause-panel.png"
+          ],
+          "src": [
+            "images/pause-overlay/pause-panel@0.5x.webp",
+            "images/pause-overlay/pause-panel@0.5x.png",
+            "images/pause-overlay/pause-panel.webp",
+            "images/pause-overlay/pause-panel.png"
+          ],
+          "data": {
+            "tags": {
+              "m": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "preload",
+      "assets": [
+        {
+          "alias": [
+            "images/preload",
+            "preload"
+          ],
+          "src": [
+            "images/preload@0.5x.webp.json",
+            "images/preload@0.5x.png.json",
+            "images/preload.webp.json",
+            "images/preload.png.json"
+          ],
+          "data": {
+            "tags": {
+              "m": true,
+              "tps": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "results-screen",
+      "assets": [
+        {
+          "alias": [
+            "images/results-screen",
+            "results-screen"
+          ],
+          "src": [
+            "images/results-screen@0.5x.webp.json",
+            "images/results-screen@0.5x.png.json",
+            "images/results-screen.webp.json",
+            "images/results-screen.png.json"
+          ],
+          "data": {
+            "tags": {
+              "m": true,
+              "tps": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "title-screen",
+      "assets": [
+        {
+          "alias": [
+            "images/title-screen",
+            "title-screen"
+          ],
+          "src": [
+            "images/title-screen@0.5x.webp.json",
+            "images/title-screen@0.5x.png.json",
+            "images/title-screen.webp.json",
+            "images/title-screen.png.json"
+          ],
+          "data": {
+            "tags": {
+              "m": true,
+              "tps": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
