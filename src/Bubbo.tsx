@@ -1,33 +1,46 @@
 import { Application } from "pixi.js";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { storage } from "./storage";
+import { navigation } from "./navigation";
+import { loadScreen } from "./screens/LoadScreen";
+import { audio } from "./audio";
+
+export const app = new Application();
 
 const Bubbo = () => {
-  const [app, setApp] = useState<Application>();
   const container = useRef<HTMLDivElement>(null);
   const initApp = async () => {
     if (!container.current) return;
 
-    const app = new Application();
-
-    setApp(app);
-
     const width = container.current.clientWidth;
     const height = container.current.clientHeight;
 
-    await app.init({ width, height, background: 0x000000, backgroundAlpha: 0 });
+    await app.init({
+      width,
+      height,
+      resolution: Math.max(window.devicePixelRatio, 2),
+      backgroundColor: 0xffffff,
+    });
+
     container.current.appendChild(app.canvas);
+
+    storage.readyStorage();
+
+    navigation.setLoadScreen(loadScreen);
+
+    audio.muted(storage.getStorageItem("muted"));
 
     return app;
   };
 
   const resize = useCallback(() => {
-    if (!app || !container.current) return;
+    if (!container.current) return;
 
     const width = container.current?.clientWidth;
     const height = container.current?.clientHeight;
 
     app.renderer.resize(width, height);
-  }, [app]);
+  }, []);
 
   useEffect(() => {
     const initResult = initApp();

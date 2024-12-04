@@ -1,7 +1,7 @@
 import { Assets, Container, Ticker } from "pixi.js";
 
 import { areBundlesLoaded } from "./assets";
-import { app } from "./main";
+import { app } from "./Bubbo";
 
 export interface AppScreen<T = any> extends Container {
   prepare?: (data?: T) => void;
