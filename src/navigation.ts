@@ -134,7 +134,6 @@ class Navigation {
     if (current) {
       await this._removeScreen(current);
     }
-
     if (Ctor.assetBundles && !areBundlesLoaded(Ctor.assetBundles)) {
       if (this.loadScreen) {
         this._addScreen(this.loadScreen, isOverlay);

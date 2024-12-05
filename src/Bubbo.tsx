@@ -1,14 +1,27 @@
 import { Application } from "pixi.js";
-import { useCallback, useEffect, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { storage } from "./storage";
 import { navigation } from "./navigation";
-import { loadScreen } from "./screens/LoadScreen";
-import { audio } from "./audio";
+import { LoadScreen } from "./screens/LoadScreen";
+import { audio, bgm } from "./audio";
+import { useSearchParams } from "react-router";
 
 export const app = new Application();
 
+let hasInteracted = false;
+
 const Bubbo = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const container = useRef<HTMLDivElement>(null);
+
+  const [params] = useSearchParams();
+
   const initApp = async () => {
     if (!container.current) return;
 
@@ -26,9 +39,11 @@ const Bubbo = () => {
 
     storage.readyStorage();
 
-    navigation.setLoadScreen(loadScreen);
+    navigation.setLoadScreen(LoadScreen);
 
     audio.muted(storage.getStorageItem("muted"));
+
+    setIsMounted(true);
 
     return app;
   };
@@ -42,7 +57,7 @@ const Bubbo = () => {
     app.renderer.resize(width, height);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const initResult = initApp();
 
     return () => {
@@ -57,6 +72,47 @@ const Bubbo = () => {
       window.removeEventListener("resize", resize);
     };
   }, [resize]);
+
+  useEffect(() => {
+    const pointerDown = () => {
+      if (!hasInteracted) {
+        // Only play audio if it hasn't already been played
+        bgm.play("audio/bubbo-bubbo-bg-music.wav");
+      }
+
+      hasInteracted = true;
+    };
+
+    const visibilityChange = () => {
+      if (document.visibilityState !== "visible") {
+        // Always mute on hidden
+        audio.muted(true);
+      } else {
+        // Only unmute if it was previously unmuted
+        audio.muted(storage.getStorageItem("muted"));
+      }
+    };
+
+    document.addEventListener("pointerdown", pointerDown);
+    document.addEventListener("visibilitychange", visibilityChange);
+
+    return () => {
+      document.removeEventListener("pointerdown", pointerDown);
+      document.removeEventListener("visibilitychange", visibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+    if (params.get("play")) {
+      // Assets.loadBundle(TitleScreen.assetBundles);
+      // navigation.goToScreen(GameScreen);
+    } else if (params.get("loading")) {
+      navigation.goToScreen(LoadScreen);
+    } else {
+      // navigation.goToScreen(TitleScreen);
+    }
+  }, [isMounted, params]);
 
   return <div ref={container} className="box-border h-screen w-screen"></div>;
 };

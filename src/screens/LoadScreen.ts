@@ -5,7 +5,7 @@ import gsap from "gsap";
 // import { lerp } from "../utils/maths/maths";
 import { randomRange } from "../utils/maths/rand";
 
-export class loadScreen extends Container {
+export class LoadScreen extends Container {
   public static SCREEN_ID = "loader";
 
   public static assetBundles = ["preload"];
@@ -26,7 +26,7 @@ export class loadScreen extends Container {
 
   constructor() {
     super();
-
+    debugger;
     this._background = new TilingSprite({
       texture: Texture.from("background-tile"),
       width: 64,
