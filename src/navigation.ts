@@ -1,7 +1,6 @@
-import { Assets, Container, Ticker } from "pixi.js";
+import { Application, Assets, Container, Ticker } from "pixi.js";
 
 import { areBundlesLoaded } from "./assets";
-import { app } from "./Bubbo";
 
 export interface AppScreen<T = any> extends Container {
   prepare?: (data?: T) => void;
@@ -17,7 +16,7 @@ interface AppScreenConstructor {
   new (): AppScreen;
 }
 
-class Navigation {
+export class Navigation {
   public screenView = new Container();
 
   public overlayView = new Container();
@@ -38,8 +37,14 @@ class Navigation {
 
   private readonly _screenMap = new Map<string, AppScreen>();
 
+  private readonly app: Application;
+
+  constructor(app: Application) {
+    this.app = app;
+  }
+
   public init() {
-    app.stage.addChild(this.screenView, this.overlayView);
+    this.app.stage.addChild(this.screenView, this.overlayView);
   }
 
   /**
@@ -96,7 +101,7 @@ class Navigation {
     }
 
     if (screen.update) {
-      app.ticker.add(screen.update, screen);
+      this.app.ticker.add(screen.update, screen);
     }
 
     if (screen.show) {
@@ -116,7 +121,7 @@ class Navigation {
     }
 
     if (screen.update) {
-      app.ticker.remove(screen.update, screen);
+      this.app.ticker.remove(screen.update, screen);
     }
 
     if (screen.parent) {
@@ -164,5 +169,3 @@ class Navigation {
     this.currentOverlay?.resize?.(w, h);
   }
 }
-
-export const navigation = new Navigation();

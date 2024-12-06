@@ -26,7 +26,6 @@ export class LoadScreen extends Container {
 
   constructor() {
     super();
-    debugger;
     this._background = new TilingSprite({
       texture: Texture.from("background-tile"),
       width: 64,

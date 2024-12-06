@@ -135,6 +135,7 @@ export const audio = {
   },
 };
 
+// TODO 改造为 react hooks
 /**
  * A class to handle background music within the game.
  * It automatically loops audio and fades between tracks.
