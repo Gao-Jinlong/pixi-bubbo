@@ -1,12 +1,14 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, AssetsClass } from "pixi.js";
 import { useCallback, useEffect, useRef } from "react";
 import { storage } from "./storage";
 import { Navigation } from "./navigation";
 import { LoadScreen } from "./screens/LoadScreen";
-import { audio, bgm } from "./audio";
 import { useSearchParams } from "react-router";
 import { useAppStore } from "./store/useApplication";
 import { useNavigationStore } from "./store/useNaigation";
+import { useBGM, useSFX } from "./store/useAudio";
+import { audio, BGM, SFX } from "./audio";
+import { initAssets } from "./assets";
 
 let hasInteracted = false;
 
@@ -17,6 +19,12 @@ const Bubbo = () => {
 
   const { app, setApp } = useAppStore((state) => state);
   const { navigation, setNavigation } = useNavigationStore((state) => state);
+
+  const { bgm, setBgm: setBGM } = useBGM((state) => state);
+  const { setSfx: setSFX } = useSFX((state) => state);
+
+  const assets = useRef<Promise<AssetsClass>>();
+
   const initApp = useCallback(async () => {
     if (!container.current) return;
     const app = new Application();
@@ -32,14 +40,21 @@ const Bubbo = () => {
 
     container.current.appendChild(app.canvas);
 
+    if (!assets.current) {
+      assets.current = initAssets();
+    }
+
     storage.readyStorage();
 
     navigation.setLoadScreen(LoadScreen);
 
+    setBGM(new BGM());
+    setSFX(new SFX());
+
     audio.muted(storage.getStorageItem("muted"));
 
     return app;
-  }, [setApp, setNavigation]);
+  }, [setApp, setBGM, setNavigation, setSFX]);
 
   const resize = useCallback(() => {
     if (!container.current || !app) return;
@@ -93,7 +108,7 @@ const Bubbo = () => {
       document.removeEventListener("pointerdown", pointerDown);
       document.removeEventListener("visibilitychange", visibilityChange);
     };
-  }, []);
+  }, [BGM]);
 
   useEffect(() => {
     if (params.get("play")) {

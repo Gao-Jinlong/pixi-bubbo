@@ -5,7 +5,7 @@ import gsap from "gsap";
  * A class to handle background music within the game.
  * It automatically loops audio and fades between tracks.
  */
-class BGM {
+export class BGM {
   /** The alias so it doesn't swap audio to the same one. */
   public currentAlias?: string;
   /** The current sound instance. */
@@ -75,7 +75,7 @@ class BGM {
 /**
  * A class to handle sound effects within the game.
  */
-class SFX {
+export class SFX {
   /** A global volume that affects all sfx sounds. */
   private _volume = 0.5;
 
@@ -134,14 +134,3 @@ export const audio = {
     }
   },
 };
-
-// TODO 改造为 react hooks
-/**
- * A class to handle background music within the game.
- * It automatically loops audio and fades between tracks.
- */
-export const bgm = new BGM();
-/**
- * A class to handle sound effects within the game.
- */
-export const sfx = new SFX();
