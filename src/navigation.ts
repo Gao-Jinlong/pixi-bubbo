@@ -21,7 +21,7 @@ export class Navigation {
 
   public overlayView = new Container();
 
-  private currentScreen?: AppScreen;
+  public currentScreen?: AppScreen;
 
   private currentScreenResize?: () => void;
 
@@ -60,7 +60,7 @@ export class Navigation {
   }
 
   public goToScreen<T>(Ctor: AppScreenConstructor, data?: T) {
-    this._showScreen(Ctor, false, data);
+    return this._showScreen(Ctor, false, data);
   }
 
   public async hideOverlay() {
@@ -167,5 +167,8 @@ export class Navigation {
 
     this.currentScreen?.resize?.(w, h);
     this.currentOverlay?.resize?.(w, h);
+  }
+  public isCurrentScreen(Ctor: AppScreenConstructor) {
+    return this.currentScreen?.constructor === Ctor;
   }
 }

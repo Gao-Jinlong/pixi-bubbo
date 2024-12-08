@@ -18,31 +18,33 @@ const Bubbo = () => {
   const [params] = useSearchParams();
 
   const { app, setApp } = useAppStore((state) => state);
-  const { navigation, setNavigation } = useNavigationStore((state) => state);
+  const { navigation, setNavigation, currentScreen, setCurrentScreen } =
+    useNavigationStore((state) => state);
 
   const { bgm, setBgm: setBGM } = useBGM((state) => state);
   const { setSfx: setSFX } = useSFX((state) => state);
 
-  const assets = useRef<Promise<AssetsClass>>();
+  const assets = useRef<Promise<AssetsClass>>(null);
 
   const initApp = useCallback(async () => {
     if (!container.current) return;
     const app = new Application();
     setApp(app);
-    const navigation = new Navigation(app);
-    setNavigation(navigation);
 
     await app.init({
       resizeTo: container.current,
       resolution: Math.max(window.devicePixelRatio, 2),
       background: 0xffffff,
     });
+    const navigation = new Navigation(app);
+    setNavigation(navigation);
 
     container.current.appendChild(app.canvas);
 
     if (!assets.current) {
       assets.current = initAssets();
     }
+    await assets.current;
 
     storage.readyStorage();
 
@@ -108,18 +110,19 @@ const Bubbo = () => {
       document.removeEventListener("pointerdown", pointerDown);
       document.removeEventListener("visibilitychange", visibilityChange);
     };
-  }, [BGM]);
+  }, [bgm]);
 
   useEffect(() => {
     if (params.get("play")) {
       // Assets.loadBundle(TitleScreen.assetBundles);
       // navigation.goToScreen(GameScreen);
-    } else if (params.get("loading")) {
+    } else if (params.get("loading") && currentScreen !== LoadScreen) {
       navigation?.goToScreen(LoadScreen);
+      setCurrentScreen(LoadScreen);
     } else {
       // navigation.goToScreen(TitleScreen);
     }
-  }, [navigation, params]);
+  }, [currentScreen, navigation, params, setCurrentScreen]);
 
   return <div ref={container} className="box-border h-screen w-screen"></div>;
 };
