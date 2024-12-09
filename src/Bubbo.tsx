@@ -9,6 +9,7 @@ import { useNavigationStore } from "./store/useNaigation";
 import { useBGM, useSFX } from "./store/useAudio";
 import { audio, BGM, SFX } from "./audio";
 import { initAssets } from "./assets";
+import { TitleScreen } from "./screens/TitleScreen";
 
 let hasInteracted = false;
 
@@ -32,9 +33,9 @@ const Bubbo = () => {
     setApp(app);
 
     await app.init({
-      resizeTo: container.current,
-      resolution: Math.max(window.devicePixelRatio, 2),
       background: 0xffffff,
+      resizeTo: container.current,
+      // resolution: Math.max(window.devicePixelRatio, 2),
     });
     const navigation = new Navigation(app);
     setNavigation(navigation);
@@ -113,6 +114,8 @@ const Bubbo = () => {
   }, [bgm]);
 
   useEffect(() => {
+    if (!app) return;
+
     if (params.get("play")) {
       // Assets.loadBundle(TitleScreen.assetBundles);
       // navigation.goToScreen(GameScreen);
@@ -120,11 +123,16 @@ const Bubbo = () => {
       navigation?.goToScreen(LoadScreen);
       setCurrentScreen(LoadScreen);
     } else {
-      // navigation.goToScreen(TitleScreen);
+      navigation?.goToScreen(TitleScreen);
+      setCurrentScreen(TitleScreen);
     }
-  }, [currentScreen, navigation, params, setCurrentScreen]);
+  }, [app, currentScreen, navigation, params, setCurrentScreen]);
 
-  return <div ref={container} className="box-border h-screen w-screen"></div>;
+  return (
+    <div className="box-border flex h-screen w-screen items-center justify-center">
+      <div ref={container} className="h-full w-full"></div>
+    </div>
+  );
 };
 
 export default Bubbo;
