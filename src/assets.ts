@@ -20,12 +20,16 @@ export const resolveJsonUrl = {
 extensions.add(resolveJsonUrl);
 
 export async function initAssets() {
+  // Init PixiJS assets with this asset manifest
   await Assets.init({ manifest, basePath: "assets" });
 
+  // Load assets for the load screen
   await Assets.loadBundle(["preload", "default"]);
 
+  // List all existing bundles names
   const allBundles = manifest.bundles.map((item) => item.name);
 
+  // Start up background loading of all bundles
   Assets.backgroundLoadBundle(allBundles);
 
   return Assets;

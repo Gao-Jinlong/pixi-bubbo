@@ -134,3 +134,6 @@ export const audio = {
     }
   },
 };
+
+export const bgm = new BGM();
+export const sfx = new SFX();

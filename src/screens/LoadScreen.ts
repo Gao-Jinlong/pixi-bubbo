@@ -4,6 +4,7 @@ import { designConfig } from "../game/designConfig";
 import gsap from "gsap";
 // import { lerp } from "../utils/maths/maths";
 import { randomRange } from "../utils/maths/rand";
+import { i18n } from "../utils/i18n";
 
 export class LoadScreen extends Container {
   public static SCREEN_ID = "loader";
@@ -47,7 +48,7 @@ export class LoadScreen extends Container {
     // this._cannon.type = randomType();
     // this.addChild(this._cannon.view);
 
-    this._pixiLogo = new PixiLogo();
+    this._pixiLogo = new PixiLogo(i18n.t("pixiLogoHeader"));
     this._pixiLogo.view.scale.set(0.75);
     this._bottomContainer.addChild(this._pixiLogo.view);
     this.addChild(this._bottomContainer);

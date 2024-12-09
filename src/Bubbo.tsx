@@ -1,4 +1,4 @@
-import { Application, AssetsClass } from "pixi.js";
+import { Application, Assets, AssetsClass } from "pixi.js";
 import { useCallback, useEffect, useRef } from "react";
 import { storage } from "./storage";
 import { Navigation } from "./navigation";
@@ -6,8 +6,7 @@ import { LoadScreen } from "./screens/LoadScreen";
 import { useSearchParams } from "react-router";
 import { useAppStore } from "./store/useApplication";
 import { useNavigationStore } from "./store/useNaigation";
-import { useBGM, useSFX } from "./store/useAudio";
-import { audio, BGM, SFX } from "./audio";
+import { audio, bgm, BGM, SFX } from "./audio";
 import { initAssets } from "./assets";
 import { TitleScreen } from "./screens/TitleScreen";
 
@@ -22,15 +21,11 @@ const Bubbo = () => {
   const { navigation, setNavigation, currentScreen, setCurrentScreen } =
     useNavigationStore((state) => state);
 
-  const { bgm, setBgm: setBGM } = useBGM((state) => state);
-  const { setSfx: setSFX } = useSFX((state) => state);
-
   const assets = useRef<Promise<AssetsClass>>(null);
 
   const initApp = useCallback(async () => {
     if (!container.current) return;
     const app = new Application();
-    setApp(app);
 
     await app.init({
       background: 0xffffff,
@@ -51,13 +46,12 @@ const Bubbo = () => {
 
     navigation.setLoadScreen(LoadScreen);
 
-    setBGM(new BGM());
-    setSFX(new SFX());
-
     audio.muted(storage.getStorageItem("muted"));
 
+    setApp(app);
+
     return app;
-  }, [setApp, setBGM, setNavigation, setSFX]);
+  }, [setApp, setNavigation]);
 
   const resize = useCallback(() => {
     if (!container.current || !app) return;
@@ -111,13 +105,13 @@ const Bubbo = () => {
       document.removeEventListener("pointerdown", pointerDown);
       document.removeEventListener("visibilitychange", visibilityChange);
     };
-  }, [bgm]);
+  }, []);
 
   useEffect(() => {
     if (!app) return;
 
     if (params.get("play")) {
-      // Assets.loadBundle(TitleScreen.assetBundles);
+      Assets.loadBundle(TitleScreen.assetBundles);
       // navigation.goToScreen(GameScreen);
     } else if (params.get("loading") && currentScreen !== LoadScreen) {
       navigation?.goToScreen(LoadScreen);
