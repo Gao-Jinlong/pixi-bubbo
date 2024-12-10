@@ -1,14 +1,15 @@
 import { Application, Assets, AssetsClass } from "pixi.js";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { storage } from "./storage";
-import { Navigation } from "./navigation";
+import { navigation } from "./navigation";
 import { LoadScreen } from "./screens/LoadScreen";
 import { useSearchParams } from "react-router";
-import { useAppStore } from "./store/useApplication";
-import { useNavigationStore } from "./store/useNaigation";
-import { audio, bgm, BGM, SFX } from "./audio";
+import { audio, bgm } from "./audio";
 import { initAssets } from "./assets";
 import { TitleScreen } from "./screens/TitleScreen";
+import { useNavigationStore } from "./store/useNaigation";
+import { app } from "./application";
+import { designConfig } from "./game/designConfig";
 
 let hasInteracted = false;
 
@@ -17,23 +18,22 @@ const Bubbo = () => {
 
   const [params] = useSearchParams();
 
-  const { app, setApp } = useAppStore((state) => state);
-  const { navigation, setNavigation, currentScreen, setCurrentScreen } =
-    useNavigationStore((state) => state);
+  const { currentScreen, setCurrentScreen } = useNavigationStore(
+    (state) => state,
+  );
 
   const assets = useRef<Promise<AssetsClass>>(null);
+  const appRef = useRef<Promise<Application> | null>(null);
+
+  const [mounted, setMounted] = useState(false);
 
   const initApp = useCallback(async () => {
     if (!container.current) return;
-    const app = new Application();
-
     await app.init({
-      background: 0xffffff,
+      background: 0x000000,
       resizeTo: container.current,
       // resolution: Math.max(window.devicePixelRatio, 2),
     });
-    const navigation = new Navigation(app);
-    setNavigation(navigation);
 
     container.current.appendChild(app.canvas);
 
@@ -48,35 +48,38 @@ const Bubbo = () => {
 
     audio.muted(storage.getStorageItem("muted"));
 
-    setApp(app);
+    setMounted(true);
 
     return app;
-  }, [setApp, setNavigation]);
+  }, []);
 
   const resize = useCallback(() => {
     if (!container.current || !app) return;
 
     const width = container.current?.clientWidth;
     const height = container.current?.clientHeight;
+    const minWidth = designConfig.content.width;
+    const minHeight = designConfig.content.height;
 
-    app.renderer.resize(width, height);
-  }, [app]);
+    const scaleX = width < minWidth ? minWidth / width : 1;
+    const scaleY = height < minHeight ? minHeight / height : 1;
+    const scale = scaleX > scaleY ? scaleX : scaleY;
+
+    const finalWidth = width * scale;
+    const finalHeight = height * scale;
+
+    app.renderer.resize(finalWidth, finalHeight);
+    container.current.scrollTo(0, 0);
+
+    navigation.init();
+    navigation.resize(finalWidth, finalHeight);
+  }, []);
 
   useEffect(() => {
-    const initResult = initApp();
+    const initResult = appRef.current || initApp();
 
-    return () => {
-      initResult.then((app) => app?.destroy(true));
-    };
+    appRef.current = initResult;
   }, [initApp]);
-
-  useEffect(() => {
-    window.addEventListener("resize", resize);
-
-    return () => {
-      window.removeEventListener("resize", resize);
-    };
-  }, [resize]);
 
   useEffect(() => {
     const pointerDown = () => {
@@ -108,19 +111,27 @@ const Bubbo = () => {
   }, []);
 
   useEffect(() => {
-    if (!app) return;
-
+    if (!mounted) return;
     if (params.get("play")) {
       Assets.loadBundle(TitleScreen.assetBundles);
       // navigation.goToScreen(GameScreen);
     } else if (params.get("loading") && currentScreen !== LoadScreen) {
       navigation?.goToScreen(LoadScreen);
       setCurrentScreen(LoadScreen);
-    } else {
+    } else if (currentScreen !== TitleScreen) {
       navigation?.goToScreen(TitleScreen);
       setCurrentScreen(TitleScreen);
     }
-  }, [app, currentScreen, navigation, params, setCurrentScreen]);
+  }, [currentScreen, mounted, params, setCurrentScreen]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    window.addEventListener("resize", resize);
+    resize();
+    return () => {
+      window.removeEventListener("resize", resize);
+    };
+  }, [mounted, resize]);
 
   return (
     <div className="box-border flex h-screen w-screen items-center justify-center">

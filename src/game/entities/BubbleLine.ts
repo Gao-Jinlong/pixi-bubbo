@@ -16,7 +16,10 @@ export class BubbleLine {
    * An array containing the bubbles of the line.
    * Every other index is empty
    */
-  public bubbles: (Bubble | undefined)[] = new Array(MAX_BUBBLE_INDEX + 1);
+  public bubbles: (Bubble | undefined)[] = Array.from(
+    { length: MAX_BUBBLE_INDEX + 1 },
+    () => undefined,
+  );
   /** The number of bubbles in the line. */
   public bubbleCount!: number;
   public game!: Game;

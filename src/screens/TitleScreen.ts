@@ -1,13 +1,26 @@
-import { Container, Graphics, Rectangle, Texture, TilingSprite } from "pixi.js";
+import {
+  Container,
+  FederatedPointerEvent,
+  Graphics,
+  Rectangle,
+  Texture,
+  TilingSprite,
+} from "pixi.js";
 import { Title } from "../ui/Title";
 import { designConfig } from "../game/designConfig";
-import { AppScreen } from "../navigation";
+import { AppScreen, navigation } from "../navigation";
 import { boardConfig, randomType } from "../game/boardConfig";
 import { PixiLogo } from "../ui/PixiLogo";
 import { Porthole } from "../ui/Porthole";
 import { PrimaryButton } from "../ui/buttons/PrimaryButton";
 import { i18n } from "../utils/i18n";
 import { AudioButton } from "../ui/buttons/AudioButton";
+import { GameScreen } from "./GameScreen";
+import gsap from "gsap";
+import { throttle } from "../utils/throttle";
+import { sfx } from "../audio";
+import { Cannon } from "../game/entities/Cannon";
+import { storage } from "../storage";
 
 export class TitleScreen extends Container implements AppScreen {
   public static SCREEN_ID = "title";
@@ -25,6 +38,8 @@ export class TitleScreen extends Container implements AppScreen {
   private _audioBtn!: AudioButton;
   private _portholeOne!: Porthole;
   private _portholeTwo!: Porthole;
+  private _aimAngle!: number;
+  private _cannon!: Cannon;
 
   private _topAnimContainer = new Container();
   private _midAnimContainer = new Container();
@@ -61,6 +76,62 @@ export class TitleScreen extends Container implements AppScreen {
       this._midAnimContainer,
       this._bottomAnimContainer,
     );
+  }
+
+  public prepare() {
+    this._portholeOne.stop();
+    this._portholeTwo.stop();
+
+    gsap.set(this._topAnimContainer, { y: -350 });
+    gsap.set(this._midAnimContainer, { x: 200 });
+    gsap.set(this._bottomAnimContainer, { y: 350 });
+  }
+
+  public async show() {
+    const cb = this._calculateAngle.bind(this);
+    this._hitContainer.on("pointermove", cb);
+    this._hitContainer.on("pointertap", cb);
+
+    gsap.killTweensOf(this);
+
+    this.alpha = 0;
+
+    this._portholeOne.start();
+    this._portholeTwo.start();
+
+    this._audioBtn.forceSwitch(storage.getStorageItem("muted"));
+
+    await gsap.to(this, { alpha: 1, duration: 0.2, ease: "linear" });
+
+    const endData = {
+      x: 0,
+      y: 0,
+      duration: 0.75,
+      ease: "elastic.out(1, 0.5)",
+    };
+
+    gsap.to(this._topAnimContainer, endData);
+    gsap.to(this._midAnimContainer, endData);
+    gsap.to(this._bottomAnimContainer, endData);
+  }
+
+  private _calculateAngle(e: FederatedPointerEvent) {
+    const globalPos = this._cannon.view.getGlobalPosition();
+    const angleRadians = Math.atan2(
+      e.global.y - globalPos.y,
+      e.global.x - globalPos.x,
+    );
+
+    if (Math.abs(this._aimAngle - angleRadians) > Math.PI * 0.0002) {
+      throttle("cannon-audio", 150, () => {
+        sfx.play("audio/cannon-move.wav", {
+          volume: 0.2,
+        });
+      });
+    }
+
+    this._aimAngle = angleRadians;
+    this._cannon.rotation = angleRadians + Math.PI * 0.5;
   }
 
   private _buildDetails() {
@@ -130,8 +201,7 @@ export class TitleScreen extends Container implements AppScreen {
 
     this._playBtn.onPress.connect(() => {
       // Go to game screen when user presses play button
-      // TODO: 单例 navigation 实现
-      // navigation.goToScreen(GameScreen);
+      navigation.goToScreen(GameScreen);
     });
 
     this._bottomAnimContainer.addChild(this._playBtn);
