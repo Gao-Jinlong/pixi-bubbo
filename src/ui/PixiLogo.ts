@@ -16,7 +16,6 @@ export class PixiLogo {
 
     logo.anchor.set(0.5);
     this.view.addChild(logo);
-
     // If the header parameter is present, add the header text above the logo
     if (header) {
       const headerText = new Text({
