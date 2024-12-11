@@ -5,7 +5,7 @@ import { designConfig } from "../game/designConfig";
 import { Game } from "../game/Game";
 import type { AppScreen } from "../navigation";
 
-/** The screen that contains all the gameplay */
+// TODO: implement GameScreen
 export class GameScreen extends Container implements AppScreen {
   /** A unique identifier for the screen */
   public static SCREEN_ID = "game";
