@@ -2,22 +2,16 @@ import { Container, Point, Rectangle } from "pixi.js";
 import { Stats } from "./Stats";
 import { SystemRunner } from "./SystemRunner";
 import { boardConfig } from "./boardConfig";
+import { SpaceDecorSystem } from "./systems/SpaceDecorSystem";
 
 export class Game {
   public stage = new Container();
-
   public gameContainer = new Container();
-
   public gameContainerPosition = new Point();
-
   public hitContainer = new Container();
-
   public systems: SystemRunner;
-
   public stats: Stats;
-
   public isGameOver = false;
-
   private readonly _hitArea: Rectangle;
 
   constructor() {
@@ -46,6 +40,8 @@ export class Game {
   }
 
   public init() {
+    this.systems.add(SpaceDecorSystem);
+
     this.systems.init();
   }
 

@@ -14,7 +14,6 @@ interface SystemClass<
   GAME extends Game = Game,
   SYSTEM extends System<GAME> = System<GAME>,
 > {
-  /** A unique identifier for the system. */
   SYSTEM_ID: string;
   new (): SYSTEM;
 }
