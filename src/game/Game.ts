@@ -3,6 +3,8 @@ import { Stats } from "./Stats";
 import { SystemRunner } from "./SystemRunner";
 import { boardConfig } from "./boardConfig";
 import { SpaceDecorSystem } from "./systems/SpaceDecorSystem";
+import { PauseSystem } from "./systems/PauseSystem";
+import { PhysicsSystem } from "./systems/PhysicsSystem";
 
 export class Game {
   public stage = new Container();
@@ -41,6 +43,8 @@ export class Game {
 
   public init() {
     this.systems.add(SpaceDecorSystem);
+    this.systems.add(PauseSystem);
+    this.systems.add(PhysicsSystem);
 
     this.systems.init();
   }
