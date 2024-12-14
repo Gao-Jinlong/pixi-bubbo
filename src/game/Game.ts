@@ -5,6 +5,13 @@ import { boardConfig } from "./boardConfig";
 import { SpaceDecorSystem } from "./systems/SpaceDecorSystem";
 import { PauseSystem } from "./systems/PauseSystem";
 import { PhysicsSystem } from "./systems/PhysicsSystem";
+import { HudSystem } from "./systems/HudSystem";
+import { PowerSystem } from "./systems/PowerSystem";
+import { LevelSystem } from "./systems/LevelSystem";
+import { AimSystem } from "./systems/AimSystem";
+import { CannonSystem } from "./systems/CannonSystem";
+import { EffectsSystem } from "./systems/EffectsSystem";
+import { ScoreSystem } from "./systems/ScoreSystem";
 
 export class Game {
   public stage = new Container();
@@ -42,9 +49,17 @@ export class Game {
   }
 
   public init() {
+    // TODO implements systems
     this.systems.add(SpaceDecorSystem);
     this.systems.add(PauseSystem);
     this.systems.add(PhysicsSystem);
+    this.systems.add(HudSystem);
+    this.systems.add(PowerSystem);
+    this.systems.add(LevelSystem);
+    this.systems.add(AimSystem);
+    this.systems.add(CannonSystem);
+    this.systems.add(EffectsSystem);
+    this.systems.add(ScoreSystem);
 
     this.systems.init();
   }
