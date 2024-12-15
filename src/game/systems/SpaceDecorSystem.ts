@@ -163,7 +163,6 @@ class BubbleOrbit {
   }
 }
 
-/** A system that handles the background decor in the game. */
 export class SpaceDecorSystem {
   /**
    * A unique identifier used by the system runner.

@@ -49,6 +49,9 @@ export class SystemRunner {
 
     return system;
   }
+  public get<S extends System>(Class: SystemClass<Game, S>): S {
+    return this.allSystems.get(Class.SYSTEM_ID) as S;
+  }
 
   public init() {
     this.allSystems.forEach((system) => {
